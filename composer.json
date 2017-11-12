@@ -12,6 +12,5 @@
             "QHHelper\\": "QHHelper"
         },
         "files": []
-    },
-    "minimum-stability": "dev"
+    }
 }
