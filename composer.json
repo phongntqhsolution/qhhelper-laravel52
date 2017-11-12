@@ -2,10 +2,9 @@
     "name": "qhhelper/qhhelper",
     "description": "The Laravel Framework.",
     "keywords": ["QHHelper","qhhelper","framework", "laravel"],
-    "version": "1.0",
+    "version": "1.2",
     "require": {
-        "php": ">=5.5.9",
-        "laravel/framework": "5.2.*"
+        "php": ">=5.5.9"
     },
     "autoload": {
         "psr-4": {
