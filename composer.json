@@ -11,5 +11,8 @@
             "QHHelper\\": "QHHelper"
         },
         "files": []
-    }
+    },
+    "repositories": [
+        { "type": "vcs", "url": "https://bitbucket.org/tinsatthu4/qhhelper-laravel-5.2" }
+    ]
 }
