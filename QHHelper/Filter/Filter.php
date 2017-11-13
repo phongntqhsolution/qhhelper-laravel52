@@ -100,7 +100,7 @@ class Filter
         }
 
         foreach($this->attributes['s'] as $key => $param) {
-            if(in_array($key, $this->stringFields)) {
+            if(in_array($key, $this->fillable)) {
                 $this->builder = $this->builder
                     ->where($key, 'LIKE', '%' . $param . '%');
                 continue;
