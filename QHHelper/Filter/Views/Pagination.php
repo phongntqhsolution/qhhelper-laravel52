@@ -7,7 +7,7 @@ class Pagination extends DefaultView {
         $pagination->appends(request()->except('page'));
         $rs = $pagination->toArray();
         $rs['links'] = (string) $pagination->links();
-        $rs['total'] = (string) $pagination->total();
+        $rs['total'] = $pagination->total();
         return $rs;
     }
 }
