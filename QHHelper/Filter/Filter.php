@@ -146,13 +146,14 @@ class Filter
 
     private function orderBy()
     {
-        if(empty($this->orderBy['sort']) && empty($this->orderBy['order'])) {
-            $this->builder = $this->builder
-                ->orderBy($this->getModel()->getKeyName(), 'asc');
-            return $this;
+        if(empty($this->attributes['order_by'])) return $this;
+
+        foreach($this->attributes['order_by'] as $sort => $order) {
+            if(! in_array($sort, $this->fillable) || !in_array($order, ['desc', 'asc'])) continue;
+
+            $this->builder = $this->builder->orderBy($sort, $order);
         }
-        $this->builder = $this->builder
-            ->orderBy($this->orderBy['sort'], $this->orderBy['order']);
+
         return $this;
     }
     
