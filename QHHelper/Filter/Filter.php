@@ -43,6 +43,10 @@ class Filter
         return $this->builder;
     }
 
+    public function getBuilder() {
+        return $this->builder;
+    }
+
     public function getStringField()
     {
         return $this->stringFields;
