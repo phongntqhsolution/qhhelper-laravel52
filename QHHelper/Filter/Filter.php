@@ -76,11 +76,11 @@ class Filter
         return $this;
     }
 
-    private function limit() {
+    public function limit() {
 //        $this->limit =
     }
 
-    private function select()
+    public function select()
     {
         if(empty($this->attributes['select'])) {
             return $this;
@@ -93,7 +93,7 @@ class Filter
         return $this;
     }
 
-    private function search()
+    public function search()
     {
         if(empty($this->attributes['s'])) {
             return $this;
@@ -112,7 +112,7 @@ class Filter
         return $this;
     }
 
-    private function whereHas() {
+    public function whereHas() {
         if(isset($this->attributes['has']))
             foreach($this->attributes['has'] as $key => $val) {
                 if(is_string($val) && method_exists($this->getModel(), $val)) {
@@ -144,7 +144,7 @@ class Filter
         return $this;
     }
 
-    private function orderBy()
+    public function orderBy()
     {
         if(empty($this->attributes['order_by'])) return $this;
 
@@ -157,7 +157,7 @@ class Filter
         return $this;
     }
     
-    private function with()
+    public function with()
     {
         if(!isset($this->attributes['with'])) return $this;
         if(empty($this->attributes['with']) || $this->builder->count() == 0) {
@@ -171,7 +171,7 @@ class Filter
         return $this;
     }
 
-    private function call_with($relation)
+    public function call_with($relation)
     {
         if(empty($relation) || !method_exists($this->getModel(), $relation)) {
             return $this->builder;
@@ -179,7 +179,7 @@ class Filter
         return $this->builder->with($relation);
     }
 
-    private function between()
+    public function between()
     {
         if (empty($this->attributes['between'])) {
             return $this;
@@ -205,7 +205,7 @@ class Filter
         return $this;
     }
 
-    private function selectRaw() {
+    public function selectRaw() {
         if(empty($this->attributes['select_raw'])) {
             return $this;
         }
@@ -215,7 +215,7 @@ class Filter
         return $this;
     }
 
-    private function whereRaw() {
+    public function whereRaw() {
         if(empty($this->attributes['where_raw'])) {
             return $this;
         }
@@ -225,7 +225,7 @@ class Filter
         return $this;
     }
 
-    private function where() {
+    public function where() {
         foreach($this->attributes as $key => $val) {
             if(! in_array($key, $this->fillable) || is_array($val)) continue;
             if($val == 'none' || $val == 'all' || is_null($val) || empty($val)) continue;
@@ -239,7 +239,7 @@ class Filter
         return $this;
     }
 
-    private function groupBy() {
+    public function groupBy() {
         if(empty($this->attributes['group_by'])) {
             return $this;
         }
@@ -248,7 +248,7 @@ class Filter
         return $this;
     }
 
-    private function groupByRaw() {
+    public function groupByRaw() {
         if(empty($this->attributes['group_by_raw'])) {
             return $this;
         }
@@ -257,7 +257,7 @@ class Filter
         return $this;
     }
 
-    private function havingRaw() {
+    public function havingRaw() {
         if(empty($this->attributes['having_raw'])) {
             return $this;
         }
