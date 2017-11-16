@@ -18,7 +18,7 @@ class Filter
     protected $fillable = [];
 
     protected $limit = 20;
-    
+
     protected $orderBy = [];
 
     protected $betweenValue = [];
@@ -104,6 +104,7 @@ class Filter
         }
 
         foreach($this->attributes['s'] as $key => $param) {
+//            if(in_array($key, $this->stringFields)) {
             if(in_array($key, $this->fillable)) {
                 $this->builder = $this->builder
                     ->where($key, 'LIKE', '%' . $param . '%');
@@ -142,6 +143,24 @@ class Filter
                 });
             }
 
+        if(isset($this->attributes['where_has_in'])) {
+            foreach($this->attributes['where_has_in'] as $relation => $where) {
+                if(!is_array($where)) continue;
+                if(!method_exists($this->getModel(), $relation)) continue;
+
+                $this->builder = $this->builder->whereHas($relation, function($q) use ($where) {
+                    array_walk($where, function($val, $key) use (&$q){
+                        if(is_array($val))
+                            $q->whereIn($key, $val);
+                        else {
+                            $q->whereIn($key, explode(",", $val));
+                        }
+
+                    });
+                });
+            }
+        }
+
         unset($this->attributes['where_has']);
         unset($this->attributes['has']);
 
@@ -160,7 +179,7 @@ class Filter
 
         return $this;
     }
-    
+
     public function with()
     {
         if(!isset($this->attributes['with'])) return $this;
