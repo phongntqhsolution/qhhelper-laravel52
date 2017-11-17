@@ -4,10 +4,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\Controller;
+use QHHelper\Events\ResourceAfterUpdatedEvent;
+use QHHelper\Events\ResourceBeforeUpdatedEvent;
 use QHHelper\Filter\Filter;
 use QHHelper\Events\ResourceCreatedEvent;
 use QHHelper\Events\ResourceUpdatedEvent;
 use QHHelper\Events\ResourceDeletedEvent;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Auth;
 
 class BaseResourceModelController extends Controller {
@@ -41,9 +44,9 @@ class BaseResourceModelController extends Controller {
 
             $input = $request->input();
             $this->model->fill($input);
-            $model = $this->model->save();
-            event(new ResourceCreatedEvent(get_class($this->model), $model));
-            return response()->json(['data' => $model], 201);
+            $this->model->save();
+            event(new ResourceCreatedEvent(get_class($this->model), $this->model));
+            return response()->json(['data' => $this->model], 201);
         } catch (ValidationException $e) {
             return response()->json(['messages' => $e->validator->messages()], 400);
         }
@@ -54,10 +57,10 @@ class BaseResourceModelController extends Controller {
             $this->validate($request, $this->update_rule);
 
             $input = $request->input();
-
+            event(new ResourceBeforeUpdatedEvent(get_class($this->model), $model, null));
             $oldModel = clone $model;
             $model->fill($input)->save();
-
+            event(new ResourceAfterUpdatedEvent(get_class($this->model), $model, null));
             event(new ResourceUpdatedEvent(get_class($this->model), $model, $oldModel));
 
             return response()->json(['data' => $model]);
@@ -69,7 +72,7 @@ class BaseResourceModelController extends Controller {
     function destroy(Request $request, Model $model) {
         $oldModel = clone $model;
         $model->delete();
-        event(new ResourceUpdatedEvent(get_class($this->model), $model, $oldModel));
+        event(new ResourceDeletedEvent(get_class($this->model), $model, $oldModel));
         return response(null, 204);
     }
 }

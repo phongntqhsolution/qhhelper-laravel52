@@ -18,7 +18,7 @@ class Filter
     protected $fillable = [];
 
     protected $limit = 20;
-
+    
     protected $orderBy = [];
 
     protected $betweenValue = [];
@@ -179,7 +179,7 @@ class Filter
 
         return $this;
     }
-
+    
     public function with()
     {
         if(!isset($this->attributes['with'])) return $this;
