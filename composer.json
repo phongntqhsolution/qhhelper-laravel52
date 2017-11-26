@@ -2,7 +2,7 @@
     "name": "vulehoangthanh/qhhelper-laravel52",
     "description": "The Laravel Framework.",
     "keywords": ["QHHelper","qhhelper","framework", "laravel"],
-    "version": "1.2.6",
+    "version": "1.2.7",
     "license": "MIT",
     "require": {
         "php": ">=5.5.9"
@@ -11,6 +11,8 @@
         "psr-4": {
             "QHHelper\\": "QHHelper"
         },
-        "files": []
+        "files": [
+          "QHHelper/Func.php"
+        ]
     }
 }
