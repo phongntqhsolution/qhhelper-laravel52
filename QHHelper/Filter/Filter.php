@@ -127,7 +127,7 @@ class Filter
 
                 if(is_array($val) && isset($val['operator']) && isset($val['value']) ) {
                     if(method_exists($this->getModel(), $key)) {
-                        $this->builder = $this->builder->has($key, $val['operator'], $val['value']);
+                        $this->builder = $this->builder->has($this->getModel()->getTable() . '.' . $key, $val['operator'], $val['value']);
                         continue;
                     }
                 }
@@ -151,9 +151,9 @@ class Filter
                 $this->builder = $this->builder->whereHas($relation, function($q) use ($where) {
                     array_walk($where, function($val, $key) use (&$q){
                         if(is_array($val))
-                            $q->whereIn($key, $val);
+                            $q->whereIn($this->getModel()->getTable() . '.' . $key, $val);
                         else {
-                            $q->whereIn($key, explode(",", $val));
+                            $q->whereIn($this->getModel()->getTable() . '.' . $key, explode(",", $val));
                         }
 
                     });
@@ -219,7 +219,7 @@ class Filter
             if($between['from'] > $between['to']) {
                 continue;
             }
-            $this->builder = $this->builder->whereBetween($key, [
+            $this->builder = $this->builder->whereBetween($this->getModel()->getTable() . '.' . $key, [
                 $between['from'],
                 $between['to']
             ]);
@@ -254,10 +254,10 @@ class Filter
             if($val == 'none' || $val == 'all' || is_null($val) || empty($val)) continue;
             if(preg_match('/\,/', $val)) {
                 $val = explode(',', $val);
-                $this->builder = $this->builder->whereIn($key, $val);
+                $this->builder = $this->builder->whereIn($this->getModel()->getTable() . '.' . $key , $val);
                 continue;
             }
-            $this->builder = $this->builder->where($key, $val);
+            $this->builder = $this->builder->where($this->getModel()->getTable() . '.' . $key, $val);
         }
         return $this;
     }
