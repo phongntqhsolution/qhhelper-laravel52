@@ -289,6 +289,32 @@ class Filter
         return $this;
     }
 
+    public function join() {
+        if(empty($this->attributes['join']) || 
+            empty($this->attributes['join']['table']) ||
+            empty($this->attributes['join']['field_relation']) || 
+            empty($this->attributes['join']['field_origin'])
+        ) {
+            return $this;
+        }
+        $this->builder = $this->builder->join($this->attributes['join']['table'],
+            $this->attributes['join']['table'] . '.' . $this->attributes['join']['field_relation'], 
+            '=',
+            $this->getModel()->getTable() . '.' . $this->attributes['join']['field_origin']
+        )->select($this->getModel()->getTable() . '.*');
+            
+        if(!empty($this->attributes['join']['order'])
+            && is_array($this->attributes['join']['order'])
+        ) {
+            foreach($this->attributes['join']['order'] as $key => $order) {
+                $this->builder =  $this->builder
+                    ->orderBy($this->attributes['join']['table'] . '.' . $key, $order);
+            }   
+        }
+        unset($this->attributes['join']);
+        return $this;
+    }
+
     public function filter()
     {
         $viewEngine = isset($this->attributes['view']) ? $this->attributes['view'] : "default_view";
@@ -310,7 +336,8 @@ class Filter
             ->havingRaw()
             ->whereHas()
             ->whereRaw()
-            ->where();
+            ->where()
+            ->join();
 
         $view = new $class($this->builder);
 
