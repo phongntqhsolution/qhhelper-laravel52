@@ -251,7 +251,7 @@ class Filter
     public function where() {
         foreach($this->attributes as $key => $val) {
             if(! in_array($key, $this->fillable) || is_array($val)) continue;
-            if($val == 'none' || $val == 'all' || is_null($val) || empty($val)) continue;
+            if($val == 'none' || $val == 'all' || is_null($val) || !isset($val)) continue;
             if(preg_match('/\,/', $val)) {
                 $val = explode(',', $val);
                 $this->builder = $this->builder->whereIn($this->getModel()->getTable() . '.' . $key , $val);
